@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+        async function getRedirectData(currentPath) {
+            try {
+                const response = await fetch('/get-redirect-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ path: currentPath })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching redirect data:', error);
+                return null;
+            }
+        }
+
+        async function redirect() {
+            const currentPath = window.location.pathname;
+            const redirectData = await getRedirectData(currentPath);
+
+            if (redirectData && redirectData.targetUrl) {
+                setTimeout(() => {
+                    window.location.href = redirectData.targetUrl;
+                }, redirectData.delay || 3000); // default to 3 seconds if delay not provided
+            } else {
+                console.warn('No redirect data found for:', currentPath);
+            }
+        }
+
+        window.onload = redirect;
+    </script>
+</head>
+<body>
+    <p>Если перенаправление не сработало, то хуева :(</p>
+    <img src="https://cs12.pikabu.ru/post_img/big/2021/06/12/9/1623511510127964278.jpg" alt="Описание">
+</body>
+</html>

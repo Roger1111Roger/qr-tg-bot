@@ -1,0 +1,32 @@
+{
+  "name": "qr-tg-bot",
+  "version": "1.0.0",
+  "description": "-",
+  "main": "main.ts",
+  "target": "ES2020",
+  "useDefineForClassFields": true,
+  "module": "ESNext",
+  "type": "module",
+  "scripts": {
+    "start-bot": "ts-node src/bot/main.ts",
+    "start-back": "ts-node src/backend/main.ts"
+  },
+  "author": "EgorKuz",
+  "license": "ISC",
+  "dependencies": {
+    "@types/sqlite3": "^3.1.11",
+    "axios": "^1.7.2",
+    "eslint": "^9.7.0",
+    "express": "^4.19.2",
+    "husky": "^9.1.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node-telegram-bot-api": "^0.64.7",
+    "typescript": "^5.5.3"
+  }
+}
