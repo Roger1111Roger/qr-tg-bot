@@ -15,7 +15,7 @@ import { commsnds, messages } from "./messeges.ts";
 
 const token = "7129307166:AAGqUjmPmGYb0AhjovGoSRgSHKNzu0id4J8";
 
-export const domain = "f1002046.xsph.ru";
+console.log("=> Bot is running <=");
 
 const bot = new TelegramBot(token!, { polling: true }); // Создаем бота, который использует «опрос» для получения новых обновлений
 

@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { getUrlsDataUrl, UrlsData } from "../db/database.ts";
 
+export const domain = "f1002046.xsph.ru";
+
 const app = express();
 const port = 3000;
 const delay = 5000;
