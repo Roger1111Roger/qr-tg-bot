@@ -10,18 +10,6 @@ const delay = 5000;
 
 app.use(express.json());
 
-//const redirectMap: any = {
-//  "/path/targetA": { targetUrl: "https://www.youtube.com/", delay: 5000 },
-//  "/path/pathB": {
-//    targetUrl: "http://localhost:${port}/targetB1",
-//    delay: 3000,
-//  },
-//  "/path/pathC": {
-//    targetUrl: "http://localhost:${port}/targetC1",
-//    delay: 4000,
-//  },
-//};
-
 app.get("/path/*", (req, res) => {
   console.log(req.params);
 
@@ -35,7 +23,13 @@ app.post("/get-redirect-url", async (req, res) => {
   );
 
   if (redirectData) {
-    res.json({ targetUrl: redirectData[0].url, delay: delay });
+    try {
+      res.json({ targetUrl: redirectData[0].url, delay: delay });
+    } catch {
+      res
+        .status(400)
+        .json({ error: "No redirect mapping found for this path" });
+    }
   } else {
     res.status(404).json({ error: "No redirect mapping found for this path" });
   }
