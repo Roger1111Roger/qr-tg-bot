@@ -47,6 +47,7 @@ async function setupDatabase() {
         user_id INTEGER NOT NULL,
         local_url TEXT UNIQUE,
         url TEXT,
+        password TEXT,
         FOREIGN KEY (user_id) REFERENCES users(id)
       )
     `);

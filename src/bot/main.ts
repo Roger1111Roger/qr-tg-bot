@@ -106,8 +106,12 @@ bot.on("message", async (msg) => {
               const findUrl = await getUrlsDataUrl(msg.text);
 
               if (findUrl.length === 0) {
-                addUrlsData(findUser!, msg.text);
-                message = messages.registrated;
+                try {
+                  addUrlsData(findUser!, msg.text);
+                  message = messages.registrated;
+                } catch {
+                  message = messages.registrated2;
+                }
               } else {
                 message = messages.registrated1;
               }

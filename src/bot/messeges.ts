@@ -20,6 +20,7 @@ export const messages = {
   registrate1: "У нас уже занята эта ссылка",
   registrated: "Зарегистрирована",
   registrated1: "Она уже занята или не найдена",
+  registrated2: `Вы у нас не зарегистрированны поэтому сначала нажмите ${commsnds.start}`,
   redirect0: `сначала ${commsnds.redirect}`,
   redirect: "Кидай ссылку на что должна направлять",
   redirect5: "Уточни какую именно:",

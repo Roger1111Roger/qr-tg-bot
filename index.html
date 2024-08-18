@@ -2,7 +2,135 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
+    <style>
+      body {
+          background-image: linear-gradient(to bottom, #ffffff, #9c9c9c);
+          background-size: cover;
+          background-attachment: fixed;
+          height: 100vh;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          overflow-x: hidden; 
+      }
+      .container {
+          display: flex;
+          justify-content: space-between;
+          width: 96%; 
+          padding: 20px 2%; 
+          flex: 1;
+      }
+      .timer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 60px;
+          font-weight: bold;
+          color: #fff;
+      }
+      .news {
+          width: 20%;
+          min-height: 80%;
+          background-color: #fff;
+          padding: 50px;
+          border-radius: 10px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin: 0 2%; 
+          flex-grow: 1;
+      }
+      .news img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          border-radius: 10px;
+      }
+      .main {
+          width: 40%;
+          height: 60%;
+          background-color: #fff;
+          padding: 50px;
+          border-radius: 10px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.4); 
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          z-index: 1; 
+          margin: 0 2%; 
+      }
+      .main img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          border-radius: 10px;
+      }
+      .footer {
+          text-align: center;
+          font-size: 14px;
+          color: #333;
+          margin-top: 10px; 
+          padding-bottom: 10px;
+          z-index: 2; 
+      }
+      .footer a {
+          color: #007bff;
+          text-decoration: none;
+      }
+      .footer a:hover {
+          text-decoration: underline;
+      }
+      #redirect-info {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      #countdown {
+          font-size: 48px;
+          font-weight: bold;
+      }
+
+      /* Медиа-запросы для мобильных устройств */
+      @media (max-width: 768px) {
+          .container {
+              flex-direction: column;
+              align-items: center;
+              padding: 0 10px;
+          }
+          .news {
+              width: 90%;
+              height: auto;
+              margin: 10px 0;
+              display: none;
+          }
+          .news.news-right {
+              display: block; 
+              padding: 0 20px;
+              flex-grow: 1;
+          }
+          .main {
+              width: 90%;
+              height: auto;
+              margin: 10px 0;
+              padding: 0 20px;
+          }
+          .main img {
+              margin-bottom: 20px;
+          }
+          .footer {
+              width: 90%;
+              margin: 10px 0;
+          }
+      }
+    </style>
     <script type="text/javascript">
         async function getRedirectData(currentPath) {
             try {
@@ -29,20 +157,94 @@
             const currentPath = window.location.pathname;
             const redirectData = await getRedirectData(currentPath);
 
+            const redirectInfoElement = document.getElementById('redirect-info');
+            const targetUrlElement = document.getElementById('redirect-url');
+            const counterElement = document.getElementById('countdown');
+            const fallbackMessageElement = document.getElementById('fallback-message');
+            const fallbackImageElement = document.getElementById('fallback-image');
+
             if (redirectData && redirectData.targetUrl) {
-                setTimeout(() => {
-                    window.location.href = redirectData.targetUrl;
-                }, redirectData.delay || 3000); // default to 3 seconds if delay not provided
+                targetUrlElement.href = redirectData.targetUrl;
+                targetUrlElement.textContent = redirectData.targetUrl;
+
+                let countdown = redirectData.delay / 1000; // Convert milliseconds to seconds
+                counterElement.textContent = countdown;
+
+                const interval = setInterval(() => {
+                    countdown--;
+                    counterElement.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(interval);
+                        window.location.href = redirectData.targetUrl;
+                    }
+                }, 1000);
+
+                redirectInfoElement.style.display = 'block';
+                fallbackMessageElement.style.display = 'none';
+                fallbackImageElement.style.display = 'none';
             } else {
-                console.warn('No redirect data found for:', currentPath);
+                redirectInfoElement.style.display = 'none';
+                fallbackMessageElement.style.display = 'block';
+                fallbackImageElement.style.display = 'block';
             }
         }
 
-        window.onload = redirect;
+        async function news() {
+            try {
+                const response = await fetch('/news');
+                const data = await response.json();
+                const leftNewsContainer = document.getElementById('left-news-container');
+                const rightNewsContainer = document.getElementById('right-news-container');
+
+                data.forEach((item, index) => {
+                    const newsElement = document.createElement('div');
+                    newsElement.innerHTML = `
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <img src="${item.imageUrl}" alt="${item.text}">
+                        <p>${item.text}</p>
+                    `;
+                    if (index % 2 === 0) {
+                        leftNewsContainer.appendChild(newsElement);
+                    } else {
+                        rightNewsContainer.appendChild(newsElement);
+                    }
+                });
+            } catch (error) {
+                console.error('Error fetching news data:', error);
+            }
+        }
+
+        window.onload = () => {
+            redirect();
+            news();
+        };
     </script>
 </head>
 <body>
-    <p>Если перенаправление не сработало, то хуева :(</p>
-    <img src="https://cs12.pikabu.ru/post_img/big/2021/06/12/9/1623511510127964278.jpg" alt="Описание">
+    <div class="timer">
+        <a href="#" id="target-url"></a>
+        <div id="counter"></div>
+    </div>
+    <div class="container">
+        <div class="news" id="left-news-container">
+            <h2>Новости</h2>
+        </div>
+        <div class="main">
+            <div id="redirect-info" style="display: none;">
+                <p>Автоматическое перенаправление произойдет через </p>
+                <p></p><span id="countdown"></span> секунд</p>
+                <p>Или если вы хотите, можете нажать сами: <a href="#" id="redirect-url"></a></p>
+            </div>
+            <p id="fallback-message" style="display: none;">Похоже вы открыли не работающую ссылку</p>
+            <img id="fallback-image" src="https://cs12.pikabu.ru/post_img/big/2021/06/12/9/1623511510127964278.jpg" alt="Описание" style="display: none;">
+        </div>
+        <div class="news news-right" id="right-news-container">
+            <h2>Новости</h2>
+        </div>
+    </div>
+    <div class="footer">
+        © 2024 Компания “Плюшки”. Все права защищены. Разработано <a href="https://t.me/EgorKuZya" target="_blank">EgorKuZya</a>.
+    </div>
 </body>
 </html>

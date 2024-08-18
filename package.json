@@ -8,8 +8,8 @@
   "module": "ESNext",
   "type": "module",
   "scripts": {
-    "start-bot": "ts-node src/bot/main.ts",
-    "start-back": "ts-node src/backend/main.ts"
+    "bot": "ts-node src/bot/main.ts",
+    "back": "ts-node src/backend/main.ts"
   },
   "author": "EgorKuz",
   "license": "ISC",
