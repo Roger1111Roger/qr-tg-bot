@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "bot": "ts-node src/bot/main.ts",
-    "back": "ts-node src/backend/main.ts"
+    "back": "ts-node src/backend/main.ts",
+    "main": " node --no-warnings=ExperimentalWarning --loader ts-node/esm /root/qr-tg-bot/src/backend/main.ts && node --no-warnings=ExperimentalWarning --loader ts-node/esm /root/qr-tg-bot/src/bot/main.ts"
   },
   "author": "EgorKuz",
   "license": "ISC",
